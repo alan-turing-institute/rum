@@ -15,7 +15,7 @@
 
 (define response-channel
   (request-authorization-code rum '("Bookings.Read.All")))
- ?
+ 
 ;; (define authorization-code
 ;;   (channel-get response-channel))
 ;; (displayln (format "received auth-code ~a" authorization-code))
