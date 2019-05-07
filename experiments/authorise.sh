@@ -31,7 +31,7 @@ curl -v -d 'client_id=a462354f-fd23-4fdf-94f5-5cce5a6c27c7&scope=Bookings.Read.A
 
 ## Get token (replace device_code with the appropriate value!)
 
-curl -v -d 'client_id=a462354f-fd23-4fdf-94f5-5cce5a6c27c7&grant_type=urn:ietf:params:oauth:grant-type:device_code&device_code=DAQABAAEAAADCoMpjJXrxTq9VG9te-7FXFOdU1iL4jrbIWZerQ2QB0honJXsz0EutPw2ikyfDjbMScDkPjRhrxMUeYRmk9FGBIOO4tK13xZnSZkUBXaOdBbtLy4zMRAva2H_f8Tybl7tqDOB4pqQEMd4YIECKVzGLidLdP_v30NwJzRj46V7QGiAA' https://login.microsoftonline.com/4395f4a7-e455-4f95-8a9f-1fbaef6384f9/oauth2/v2.0/token
+curl -v -d 'client_id=a462354f-fd23-4fdf-94f5-5cce5a6c27c7&grant_type=urn:ietf:params:oauth:grant-type:device_code&device_code=DAQABAAEAAADCoMpjJXrxTq9VG9te-7FXwE9GoOxztnD8UJUpEehBBcUWbWa-35cnHYrQ0xgLy2QCb_eLCBwRRopHeV-09Ppo6GCAsOOAL2Zf8T1k2yrWzMnrsDYzB0pwg-AnYVao4RVHo-Gb_SuzA-8MMo1-a-Yso3lMTDgWgCJn71PkSSWv0CAA' https://login.microsoftonline.com/4395f4a7-e455-4f95-8a9f-1fbaef6384f9/oauth2/v2.0/token
 
 
 ## ==== GET SOME DATA

@@ -1,7 +1,12 @@
 #lang racket/base
 
-(require "oauth.rkt"
-         "oauth-deviceflow.rkt"
-         "rum-config.rkt"
-         net/url)
+(require "oauth-deviceflow.rkt"
+         "rum-config.rkt")
 
+;; Test authentication flow
+
+(define tk
+  (oauth/deviceflow MICROSOFT-OAUTH-HOST RUM-OAUTH-ENDPOINT RUM-APP))
+
+
+         
