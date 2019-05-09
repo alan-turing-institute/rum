@@ -63,6 +63,11 @@
 ;; Request a device code for an application
 ;; endpoint : the authorisation endpoint without the terminating /devicecode
 (define (request-device-code host endpoint app)
+  (printf "Contacting ~a and requesting ~a\n" host (string-append endpoint ENDPOINT/DEVICECODE))
+  (printf "With requests:\n")
+  (printf "  client_id : ~a\n" (azure-app-client app))
+  (printf "  scope     : ~a\n" (string-join (azure-app-scope app)))
+  
   (let-values ([(status headers response)
                 (http-sendrecv
                  host
