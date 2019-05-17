@@ -28,28 +28,34 @@
   (map (λ (r) (cons (office-room-email r) r)) RUM-ROOMS))
 
 ;; This version makes a table of availabilities between two given times, every 30 minutes.
+;; All times are local
 
 (define START-TIME (moment 2019 5 16 8 0 0))
 (define END-TIME (moment 2019 5 16 18 0 0))
 
 ;; ticks : moment? moment? -> [List-of moment?]
 ;; Return a list of moments between st and nd, every half-hour. 
-;; Assumes st < nd, and fall on the same dae
+;; Assumes st < nd 
 (define (ticks st nd)
-  (define day (->date st))
   ;; Round start time down to the nearest 30 minutes
   (define start-time (time-round-down/30 st))
-  ;; Round end time up to the nearest 30 minutes
-  (define end-time
-    (let ([temp (time-round-down/30 nd)])
-      (if (time=? nd temp)
-          temp
-          (+minutes temp 30))))
-  )
+  (let add/30 ([tick start-time])
+    (cond
+      [(moment>? tick nd) null]
+      [else (cons tick (add/30 (+minutes tick 30)))])))
 
 ;; Round time down to the nearest 30 minutes
 (define (time-round-down/30 tm)
-  (time (->hours tm) (* 30 (quotient (->mins tm) 30))))
+  (moment
+   (->year tm)
+   (->month tm)
+   (->day tm)
+   (->hours tm)
+   (* 30 (quotient (->minutes tm) 30))
+   0
+   #:tz (->timezone tm)))
+
+
 
 ;; Construct the following ASCII table
 
