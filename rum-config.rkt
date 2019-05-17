@@ -1,13 +1,13 @@
 #lang racket/base
 
-(require "azure.rkt"
+(require (only-in  "azure.rkt" azure-app)
+         (only-in "meeting.rkt" office-room)
          net/url)
 
 ;; Configuration data for the rum application as registered with the Turing AD instance
 
 (provide RUM-APP
-         RUM-OAUTH-ENDPOINT
-         MICROSOFT-OAUTH-HOST
+         RUM-ROOMS
 )
 
 ;; --------------------------------------------------------------------------------------------------
@@ -17,14 +17,6 @@
    "4395f4a7-e455-4f95-8a9f-1fbaef6384f9" ; Tenant id
    "a462354f-fd23-4fdf-94f5-5cce5a6c27c7" ; Client id
    '("Calendars.Read.Shared")))           ; Permissions
-
-(define RUM-OAUTH-ENDPOINT
-  (string-append "/"
-                 (azure-app-tenant RUM-APP)
-                 "/oauth2/v2.0"))
-
-(define MICROSOFT-OAUTH-HOST "login.microsoftonline.com")
-
 
 ;; Calendars (with capacity)
 
@@ -46,8 +38,7 @@
    (office-room "ACE"                  "ace@turing.ac.uk"                 "4th floor" 4)
    (office-room "Banburismus"          "banburismus@turing.ac.uk"         "4th floor" 4)
    (office-room "Delilah"              "delilah@turing.ac.uk"             "4th floor" 4)
-   (office-room "Turingery"            "turingery@turing.ac.uk"           "4th floor" 4)
-   ))
+   (office-room "Turingery"            "turingery@turing.ac.uk"           "4th floor" 4)))
 
 
 

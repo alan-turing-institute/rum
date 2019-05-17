@@ -63,23 +63,18 @@
 ;; Request a device code for an application
 ;; endpoint : the authorisation endpoint without the terminating /devicecode
 (define (request-device-code host endpoint app)
-  (printf "Contacting ~a and requesting ~a\n" host (string-append endpoint ENDPOINT/DEVICECODE))
-  (printf "With requests:\n")
-  (printf "  client_id : ~a\n" (azure-app-client app))
-  (printf "  scope     : ~a\n" (string-join (azure-app-scope app)))
-  
   (let-values ([(status headers response)
                 (http-sendrecv
                  host
                  (string-append endpoint ENDPOINT/DEVICECODE)
                  #:ssl?    #t
-                 #:method  "POST"
+                 #:method  #"POST"
                  #:headers (list "Content-Type: application/x-www-form-urlencoded")
                  #:data    (alist->form-urlencoded
                             (list (cons 'client_id (azure-app-client app))
                                   (cons 'scope (string-join (azure-app-scope app))))))])
     (when (not (http-status-OK? status))
-        (raise-user-error "Failed to connect to Microsoft authentication server" host))
+      (raise-user-error "Failed to talk to Microsoft authentication server" host status))
     (parse-device-code-response response)))
 
 ;; parse-device-code-response : port? -> oauth-devicecode?
@@ -90,8 +85,8 @@
      (hash-ref js 'user_code)
      (hash-ref js 'device_code)
      (hash-ref js 'verification_uri)
-     (string->number (hash-ref js 'expires_in))
-     (string->number (hash-ref js 'interval))
+     (hash-ref js 'expires_in)
+     (hash-ref js 'interval)
      (hash-ref js 'message))))
 
 ;; request-token :  string? string? azure-app? oauth-devicecode? -> oauth-token?
@@ -115,7 +110,7 @@
                    host
                    (string-append endpoint ENDPOINT/TOKEN)
                    #:ssl?    #t
-                   #:method  "POST"
+                   #:method  #"POST"
                    #:headers (list "Content-Type: application/x-www-form-urlencoded")
                    #:data    (alist->form-urlencoded
                               (list (cons 'grant_type TOKEN-GRANTTYPE)
@@ -144,7 +139,7 @@
     (oauth-token
      (hash-ref js 'token_type)
      (string-split (hash-ref js 'scope) #:trim? #f)
-     (hash-ref js 'expires_in) ; Gotcha: This time it's a number already!
+     (hash-ref js 'expires_in) 
      (hash-ref js 'access_token)
      (hash-ref js 'id_token #f)
      (hash-ref js 'refresh_token #f))))
