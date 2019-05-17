@@ -39,6 +39,7 @@
 (define (ticks st nd)
   ;; Round start time down to the nearest 30 minutes
   (define start-time (time-round-down/30 st))
+  ;; Keep adding 30 minutes until the end time is passed
   (let add/30 ([tick start-time])
     (cond
       [(moment>? tick nd) null]
@@ -54,6 +55,7 @@
    (* 30 (quotient (->minutes tm) 30))
    0
    #:tz (->timezone tm)))
+
 
 
 
