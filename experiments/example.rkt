@@ -1,6 +1,6 @@
 #lang racket/base
 
-(provide example)
+(provide example-raw)
 
 (define example-raw
   '#hasheq((@odata.context
@@ -1325,7 +1325,5 @@
                              #hasheq((name . "Pacific Standard Time"))))))))))
 
 
-(define example
-  (hash-ref example-raw 'value))
 
-(list-ref example 1)
+

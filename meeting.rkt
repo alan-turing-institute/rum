@@ -3,13 +3,16 @@
 ;; Utilities for accessing Office 365 meeting events
 
 (require "graph.rkt"
+         "event.rkt"
+         (only-in "experiments/example.rkt" example-raw)
          gregor
          json)
 
 (provide
  (struct-out office-room)
  (struct-out office-event) 
- graph-getSchedule)
+ graph-getSchedule
+ test-schedule)
 
 ;; ---------------------------------------------------------------------------------------------------
 ;; Types
@@ -28,15 +31,12 @@
    ) #:transparent)
 
 ;; An Office 365 event
-;; start : moment? (from the gregor library) 
-;; end   : moment?
-(struct office-event
+;; a kind of event?
+(struct office-event event
   (isPrivate ; boolean? 
    status    ; office-freeBusyStatus?
    subject   ; string? : meeting's subject line
    location  ; string? : full name of the meeting room
-   start     ; moment?
-   end       ; moment?
    )
   #:transparent)
 
@@ -67,12 +67,12 @@
 ;; parse-office-event : hasheq? -> office-event?
 (define (parse-office-event evt)
   (office-event
+   (dateTimeTimeZone->moment (hash-ref evt 'start)) ; start   
+   (dateTimeTimeZone->moment (hash-ref evt 'end))   ; end
    (hash-ref evt 'isPrivate)                        ; isPrivate
    (parse-freeBusyStatus (hash-ref evt 'status))    ; status    
    (hash-ref evt 'subject)                          ; subject 
    (hash-ref evt 'location)                         ; location
-   (dateTimeTimeZone->moment (hash-ref evt 'start)) ; start   
-   (dateTimeTimeZone->moment (hash-ref evt 'end))   ; end
    ))
 
 ;; parse-freeBusyStatus : string? -> office-freeBusyStatus?
@@ -85,4 +85,9 @@
     [(string=? st "workingElsewhere") 'workingElsewhere]
     [(string=? st "unknown")          'unknown]))
 
+;; ---------------------------------------------------------------------------------------------------
+;; Example for testing
 
+(define test-schedule
+  (map parse-schedule-items
+       (hash-ref example-raw 'value)))
