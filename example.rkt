@@ -180,7 +180,7 @@
 
 ;; Construct the following ASCII table
 
-;;                     |8am  |10   |12   |2pm  |4    |6
+;;                     |08   |10   |12   |14   |16   |18
 ;;                     |..:..|..:..|..:..|..:..|..:..|
 ;; David Blackwell     |  :  |**:*-|  :  |  :  |  :  |
 
@@ -192,8 +192,27 @@
 
 ;; Construct the time axis
 ;; 
-(define (format-schedule-ticks ticks)
-  #f)
+(define (format-schedule-axis ticks)
+  ;; leader-from-chars is either the next char from its argument, or a space if the argument is empty
+  (define (leader-from-chars cs)
+    (if (null? cs)
+        (values #\space null)
+        (values (car cs) (cdr cs))))
+  ;;
+  (define (tick->char-and-time t)
+    (let ([c (tick->chars t)]
+          [ts (if (big-time-tick? t) (string->list (->hours t)) null)])
+      (values c ts)))
+  ;; maybe-chars hold the hour and are used instead of spaces 
+  (define (schd ticks maybe-chars)
+    (if (null? ticks)
+        null
+        (let-values ([(leader next-chars) (leader-from-chars maybe-chars)]
+                     [(tick-char override-chars) (tick->char-and-time (car ticks))])
+          (append (tick->chars (car ticks))
+                  (append (if (null? (cdr ticks) null (list leader)
+                               )))))))
+  (schd ticks null))
 
 ;; Construct the separator row
 (define (format-schedule-sep ticks)
@@ -209,14 +228,16 @@
 
 (define (tick->chars t)
   (cond
-    [(= (->minutes t) 30)
-     null]
-    [(and (= (->minutes t) 0) (= (modulo (->hours t) 2) 1))
-     (list SMALL-SEP)]
-    [(= (->minutes t) 0)
-     (list BIG-SEP)]
-    [else
-     (list ERR)]))
+    [(= (->minutes t) 30) null]
+    [(small-time-tick? t) (list SMALL-SEP)]
+    [(big-time-tick? t)   (list BIG-SEP)]
+    [else                 (list ERR)]))
+
+(define (small-time-tick? t)
+  (and (= (->minutes t) 0) (= (modulo (->hours t) 2) 1)))
+
+(define (big-time-tick? t)
+  (and (= (->minutes t) 0) (= (modulo (->hours t) 2) 0)))
 
 (define (avail->char a)
   (cond
