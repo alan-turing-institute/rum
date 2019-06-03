@@ -178,41 +178,62 @@
 
 
 
-;; Construct the following ASCII table
+;; Construct the following ASCII table from a list of ticks and a list of list of availabilities. 
 
-;;                     |08   |10   |12   |14   |16   |18
-;;                     |..:..|..:..|..:..|..:..|..:..|
-;; David Blackwell     |  :  |**:*-|  :  |  :  |  :  |
+;;                     08    10    12    14    16    18    <- axis
+;;                     |..:..|..:..|..:..|..:..|..:..|     <- separator
+;; David Blackwell     |  :  |**:*-|  :  |  :  |  :  |     <- schedule row
 
-;; Given an ordered list of moments of length N and a list of office-event, return a vector of length
-;; N - 1, whose elements are 'free, 'busy, or 'partial. 
+;; The rules of this table are as follows
 
-(define tocks (make-ticks (moment 2019 05 16 08 00 00)
+;; 1. For the separator:
+;; If the tick is a big-time-tick? or a small-time-tick? then emit the corresponding character (| or :). Then
+;; emit a leader character (.), unless this is the last tick.
+
+;; 2. For the schedule row:
+;; As the separator, but instead of emitting the leader, emit either * or -, depending on the
+;; availability, unless this is the last tick (when we will have run out of availabilities)
+
+;; 3. For the axis:
+;; If the tick is a big-time-tick? then replace the current maybe-scale-chars with the hour.
+;; Do the same as separator, replacing the tick marks with space
+
+
+
+(define ticks (make-ticks (moment 2019 05 16 08 00 00)
                           (moment 2019 05 16 18 00 00)))
 
 ;; Construct the time axis
-;; 
+;;
+(define (make-char-supplier)
+  (define chars '())
+  (define (set-chars! cs)
+    (set! chars cs))
+  (define (pop!)
+    (if (null? chars)
+        #\space
+        (begin0 (car chars) (set! chars (cdr chars)))))
+  (values set-chars! pop!))
+
 (define (format-schedule-axis ticks)
-  ;; leader-from-chars is either the next char from its argument, or a space if the argument is empty
-  (define (leader-from-chars cs)
-    (if (null? cs)
-        (values #\space null)
-        (values (car cs) (cdr cs))))
+  ;; A quick and dirty stack which returns space when it runs out
+  (define-values (set-chars! pop!) (make-char-supplier))
   ;;
   (define (tick->char-and-time t)
     (let ([c (tick->chars t)]
-          [ts (if (big-time-tick? t) (string->list (->hours t)) null)])
+          [ts (if (big-time-tick? t) (string->list (number->string (->hours t))) null)])
       (values c ts)))
   ;; maybe-chars hold the hour and are used instead of spaces 
   (define (schd ticks maybe-chars)
     (if (null? ticks)
         null
-        (let-values ([(leader next-chars) (leader-from-chars maybe-chars)]
+        (let-values ([(this-char next-chars) (leader-or-chars maybe-chars)]
                      [(tick-char override-chars) (tick->char-and-time (car ticks))])
-          (append (tick->chars (car ticks))
-                  (append (if (null? (cdr ticks) null (list leader)
-                               )))))))
-  (schd ticks null))
+          (let ([next-chars (if (null? override-chars) next-chars override-chars)])
+            
+            (append tick-char (list this-char) (schd (cdr ticks) next-chars))))))
+  ;; Body
+  (list->string (schd ticks null)))
 
 ;; Construct the separator row
 (define (format-schedule-sep ticks)
