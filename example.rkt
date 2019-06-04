@@ -1,10 +1,12 @@
 #lang racket/base
 
+(require racket/format
+         gregor)
+
 (require "rum-config.rkt"
          "graph.rkt"
          "meeting.rkt"
-         "event.rkt"
-         gregor)
+         "event.rkt")
 
 (module+ test
   (require rackunit))
@@ -20,7 +22,7 @@
 (define ERR       #\?)     ; For ticks not correctly aligned
 
 ;; Make an association list of room-email . rooms
-(define rooms
+(define *rooms*
   (map (λ (r) (cons (office-room-email r) r)) RUM-ROOMS))
 
 ;; This version makes a table of availabilities between two given times, every 30 minutes.
@@ -161,7 +163,7 @@
         (let ([evt (car events)])
           (if (moment<=? (event-end (car events)) tick)
               (skip tick (cdr events))
-              (cons (clip event tick) (cdr events))))))
+              (cons (clip evt tick) (cdr events))))))
   ;; Clip the start of event e to the moment t
   (define (clip e t)
     (struct-copy event e
@@ -218,22 +220,18 @@
 (define (format-schedule-axis ticks)
   ;; A quick and dirty stack which returns space when it runs out
   (define-values (set-chars! pop!) (make-char-supplier))
-  ;;
-  (define (tick->char-and-time t)
-    (let ([c (tick->chars t)]
-          [ts (if (big-time-tick? t) (string->list (number->string (->hours t))) null)])
-      (values c ts)))
-  ;; maybe-chars hold the hour and are used instead of spaces 
-  (define (schd ticks maybe-chars)
+  ;; NB schd is not tail-recursive
+  (define (schd ticks)
     (if (null? ticks)
         null
-        (let-values ([(this-char next-chars) (leader-or-chars maybe-chars)]
-                     [(tick-char override-chars) (tick->char-and-time (car ticks))])
-          (let ([next-chars (if (null? override-chars) next-chars override-chars)])
-            
-            (append tick-char (list this-char) (schd (cdr ticks) next-chars))))))
-  ;; Body
-  (list->string (schd ticks null)))
+        (let ([t (car ticks)])
+          (when (big-time-tick? t)
+            (set-chars! (string->list (number->string (->hours t)))))
+          (if (or (big-time-tick? t) (small-time-tick? t))
+              (cons (pop!) (cons (pop!) (schd (cdr ticks))))
+              (cons (pop!) (schd (cdr ticks)))))))
+  
+  (list->string (schd ticks)))
 
 ;; Construct the separator row
 (define (format-schedule-sep ticks)
@@ -276,3 +274,34 @@
                         (schd (cdr ticks) (cdr avs))))))
   ;; Body
   (list->string (schd ticks avs)))
+
+
+
+
+;; Example
+
+;; test-schedule is an association list. 
+
+;; tabulate-schedules : [Assoc email (list-of event)) -> [assoc email schedule-string] 
+(define (tabulate-schedules ticks schedules)
+  (define (stringify-schedule s)
+    (format-schedule-row ticks (availabilities ticks (event-merge s))))
+  ;; (pair? email [List-of event]) -> (pair? email string?)
+  (define (stringify-room r)
+    (cons
+     (car r)
+     (stringify-schedule (cdr r))))
+  ;;
+  (map stringify-room schedules))
+
+;; Typeset the schedules, including axis and labels
+;; format-schedules : -> List-of string?
+(define (format-schedule rooms ticks schedules)
+  (let* ([names           (map (λ (r) (office-room-name (cdr r))) rooms)]
+         [max-name-length (apply max (map string-length names))]
+         [scheds          (tabulate-schedules ticks schedules)])
+    (list* (format-schedule-axis ticks) ;; TODO pad left
+           (format-schedule-sep ticks)
+           (for/list ([r rooms])
+             (string-append
+              (office-room-name r) " " (assoc (office-room-email r) scheds))))))
