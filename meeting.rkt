@@ -49,15 +49,16 @@
 (define (graph-getSchedule start end rooms)
   (define request
     (hasheq
-     'Schedules rooms
+     'Schedules (map office-room-email rooms)
      'StartTime (moment->dateTimeTimeZone start)
      'EndTime   (moment->dateTimeTimeZone end)
      'availabilityViewInterval 30))
   (define response
     (graph/post "/v1.0/me/calendar/getschedule"
                 request))
-  ;; The return from the API request is a list
-  (map parse-schedule-items response))
+  ;; The return from the API request is a dictionary, of which we want the "value" component, which is
+  ;; a list of room bookings
+  (map parse-schedule-items (hash-ref response 'value)))
 
 ;; parse-schedule-items : hasheq? -> [Pair-of string? office-event?] 
 (define (parse-schedule-items item)

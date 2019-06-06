@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require gregor)
+(require gregor
+         racket/string)
 
 (require "rum-config.rkt"
          "graph.rkt"
@@ -20,4 +21,5 @@
 (define *ticks* (make-ticks (moment 2019 05 16 08 00 00)
                             (moment 2019 05 16 18 00 00)))
 
-(schedule-format *rooms* *ticks* test-schedule)
+(displayln
+ (string-join (schedule-format *rooms* *ticks* test-schedule) "\n"))
