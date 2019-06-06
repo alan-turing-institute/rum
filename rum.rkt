@@ -36,6 +36,6 @@
 
 ; Display the formatted schedule
 (displayln
- (string-join (schedule-format *rooms* *ticks* *schedule*) "\n"))
+ (string-join (schedule-format *rooms* *ticks* *schedule*) "\n" #:before-first "\n"))
 
 

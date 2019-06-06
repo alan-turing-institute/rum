@@ -2,17 +2,16 @@
 
 ;; Utilities for accessing Office 365 meeting events
 
-(require "graph.rkt"
-         "event.rkt"
-         (only-in "experiments/example.rkt" example-raw)
-         gregor
+(require gregor
          json)
+
+(require "graph.rkt"
+         "event.rkt")
 
 (provide
  (struct-out office-room)
  (struct-out office-event) 
- graph-getSchedule
- test-schedule)
+ graph-getSchedule)
 
 ;; ---------------------------------------------------------------------------------------------------
 ;; Types
@@ -86,9 +85,3 @@
     [(string=? st "workingElsewhere") 'workingElsewhere]
     [(string=? st "unknown")          'unknown]))
 
-;; ---------------------------------------------------------------------------------------------------
-;; Example for testing
-
-(define test-schedule
-  (map parse-schedule-items
-       (hash-ref example-raw 'value)))
