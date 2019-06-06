@@ -12,5 +12,5 @@ rum : rum.rkt rum-config.rkt event.rkt schedule.rkt azure.rkt graph.rkt meeting.
 
 clean :
 	rm rum
-	rum -r dist/rum
+	rm -r dist/rum
 
