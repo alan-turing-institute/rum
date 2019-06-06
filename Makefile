@@ -8,7 +8,7 @@ all : dist/rum-$(VERSION).tar.gz
 
 dist/rum-$(VERSION).tar.gz : rum
 	raco distribute dist/rum rum
-	tar -czvf dist/rum-$(VERSION).tar.gz dist/rum
+	cd dist && tar -czvf rum-$(VERSION).tar.gz rum
 
 rum : rum.rkt rum-config.rkt event.rkt schedule.rkt azure.rkt graph.rkt meeting.rkt oauth-deviceflow.rkt
 	raco exe rum.rkt
