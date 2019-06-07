@@ -1,5 +1,6 @@
 ## Make a distribution of rum suitable for homebrew
 
+# The version is taken to be the most recent git (annotated) tag
 VERSION := $(shell git describe --abbrev=0)
 
 .PHONY : all clean
