@@ -166,7 +166,7 @@
 
 ;; Construct the following ASCII table from a list of ticks and a list of list of availabilities. 
 
-;;                     08    10    12    14    16    18    <- axis
+;; 1 January 2019      08    10    12    14    16    18    <- axis
 ;;                     |..:..|..:..|..:..|..:..|..:..|     <- separator
 ;; David Blackwell     |  :  |**:*-|  :  |  :  |  :  |     <- schedule row
 
@@ -186,19 +186,22 @@
 
 ;; Typeset the schedules, including axis and labels
 ;; format-schedule : -> List-of string?
-(define (schedule-format rooms ticks schedules)
-  (let* ([names           (map (λ (r) (office-room-name (cdr r))) rooms)]
-         [max-name-length (apply max (map string-length names))]
+(define (schedule-format the-date rooms ticks schedules)
+  (let* ([display-date    (~t the-date "d MMMM yyyy")]
+         [names           (map (λ (r) (office-room-name (cdr r))) rooms)]
+         [max-left-length (max (string-length display-date)
+                               (apply max (map string-length names)))]
          [scheds          (tabulate-schedules ticks schedules)])
     (list* (string-append
-            (blanks (+ max-name-length 1))
+            (pad-left max-left-length display-date)
+            " "
             (format-schedule-axis ticks)) 
            (string-append
-            (blanks (+ max-name-length 1))
+            (blanks (+ max-left-length 1))
             (format-schedule-sep ticks))
            (for/list ([r rooms])
              (string-append
-              (pad-left max-name-length (office-room-name (cdr r)))
+              (pad-left max-left-length (office-room-name (cdr r)))
               " "
               (cdr (assoc (car r) scheds)))))))
 

@@ -55,6 +55,6 @@
 
 ; Display the formatted schedule
 (displayln
- (string-join (schedule-format *rooms* *ticks* *schedule*) "\n" #:before-first "\n"))
+ (string-join (schedule-format (the-date)  *rooms* *ticks* *schedule*) "\n" #:before-first "\n"))
 
 
