@@ -18,7 +18,7 @@
 
 ;; Parse dt as the name of the day of the week, interpreted as the next such date
 (define (parse/weekday dt)
-  (let ([weekday (car (regexp-match #rx":mon|tue|wed|thu|fri|sat|sun" dt))])
+  (let ([weekday (car (regexp-match #rx"sun|mon|tue|wed|thu|fri|sat" dt))])
     (match weekday
       ["sun" (the-next-day 0)]
       ["mon" (the-next-day 1)]
