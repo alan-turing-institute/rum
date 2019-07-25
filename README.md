@@ -68,7 +68,7 @@ sudo sh -c 'echo $HOME/Library/Racket/7.3/bin >> /etc/paths.d/Racket'
 In a new terminal, run the following command:
 
 ```sh
-raco pkg install https://github.com/alan-turing-institute/rum
+raco pkg install https://github.com/alan-turing-institute/rum.git
 ```
 
 
