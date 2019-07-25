@@ -2,7 +2,7 @@
 
 Discover available meeting rooms (Turing internal).
 
-```sh
+```
 $ rum --date thursday
 
 The authentication server says:
