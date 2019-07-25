@@ -55,7 +55,10 @@ something). If the version number you noted above is not 7.3, then change each
 occurence of `7.3` in the commands to whatever the version is.
 
 ```sh
-sudo sh -c 'echo Applications/Racket\ v7.3/bin > /etc/paths.d/Racket'
+sudo sh -c 'echo /Applications/Racket\ v7.3/bin > /etc/paths.d/Racket'
+```
+then
+```sh
 sudo sh -c 'echo $HOME/Library/Racket/7.3/bin >> /etc/paths.d/Racket'
 ```
 
