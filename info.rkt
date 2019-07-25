@@ -9,4 +9,5 @@
                "gregor-lib"
                "net-lib"))
 
-
+(define racket-launcher-names '("rum"))
+(define racket-launcher-libraries '("rum.rkt"))
