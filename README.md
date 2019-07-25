@@ -2,6 +2,29 @@
 
 Discover available meeting rooms (Turing internal).
 
+```sh
+$ rum --date thursday
+
+The authentication server says:
+"To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code CVM49YUZL to authenticate."
+
+1 August 2019        8     10    12    14    16    18
+                     |..:..|..:..|..:..|..:..|..:..|
+Margaret Hamilton    |  :  |  :**|  :* |**:  |*-:  |
+Augusta Ada          |  :  |  :  |  :  |  :  |  :  |
+Lovelace             |  :**|**:**|**:**|**:**|**:  |
+Ursula Franklin      |  :* | *:**|  :* |  :**|  :  |
+Florence Nightingale |  :  |**: *|  :  |  :  |  :  |
+David Blackwell      |  :  |**:**|  :  |  :**|**:  |
+Jack Good            |  :  |**:  |**:**|**:  |  :  |
+Mary Shelley         |  :**|**:**|**:**|**:**|**:  |
+Isaac Asimov         |  :**|**:**|**:**|**:**|**:  |
+ACE                  |**:**|**:**|**:**|**:**|**:**|
+Banburismus          |  :  | *:**|* :  | *:  |  :  |
+Delilah              |  :**|**:**|**:**|**:**|**:  |
+Turingery            |  :  |  :  |  :  |**:**|**:  |
+```
+
 There are two steps to installation:
 
 1. Install Racket
