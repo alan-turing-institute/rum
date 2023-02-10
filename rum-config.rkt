@@ -24,21 +24,23 @@
 
 (define RUM-ROOMS
   (list
-   (office-room "Margaret Hamilton"    "margarethamilton@turing.ac.uk"    "1st floor" 6)
-   (office-room "Augusta Ada"          "augusta@turing.ac.uk"             "1st floor" 20)
-   (office-room "Lovelace"             "lovelace@turing.ac.uk"            "1st floor" 8)
-   (office-room "Ursula Franklin"      "ursulafranklin@turing.ac.uk"      "1st floor" 4)
-   (office-room "Florence Nightingale" "florencenightingale@turing.ac.uk" "1st floor" 2)
+   (office-room "Margaret Hamilton"    "margarethamilton@turing.ac.uk"    "1st floor" 12)
+   (office-room "Augusta Ada"          "augusta@turing.ac.uk"             "1st floor" 12)
+   (office-room "Lovelace"             "lovelace@turing.ac.uk"            "1st floor" 12)
+   (office-room "Ursula Franklin"      "ursulafranklin@turing.ac.uk"      "1st floor" 6)
+   (office-room "Cipher"               "cipher@turing.ac.uk"              "1st floor" 6)
+   (office-room "Mae Jemison"          "maejemison@turing.ac.uk"          "1st floor" 7)
+   (office-room "Florence Nightingale" "florencenightingale@turing.ac.uk" "1st floor" 7)
    (office-room "David Blackwell"      "davidblackwell@turing.ac.uk"      "1st floor" 8)
    (office-room "Jack Good"            "jackgood@turing.ac.uk"            "1st floor" 8)
 
-   (office-room "Mary Shelley"         "maryshelley@turing.ac.uk"         "2nd floor" 8)
+   (office-room "Mary Shelley"         "maryshelley@turing.ac.uk"         "2nd floor" 12)
    (office-room "Isaac Asimov"         "isaacasimov@turing.ac.uk"         "2nd floor" 4)
 
    (office-room "ACE"                  "ace@turing.ac.uk"                 "4th floor" 4)
    (office-room "Banburismus"          "banburismus@turing.ac.uk"         "4th floor" 4)
-   (office-room "Delilah"              "delilah@turing.ac.uk"             "4th floor" 4)
-   (office-room "Turingery"            "turingery@turing.ac.uk"           "4th floor" 4)))
+   (office-room "Delilah"              "delilah@turing.ac.uk"             "4th floor" 6)
+   (office-room "Turingery"            "turingery@turing.ac.uk"           "4th floor" 6)))
 
 
 
